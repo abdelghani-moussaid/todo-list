@@ -24,8 +24,7 @@ export default function display () {
     projectList.getProjectList().forEach((project, projectIndex) => {
         const projectItem = document.createElement("div");
         projectItem.classList.add("project-item");
-        const projectDiv = document.createElement("div");
-        projectDiv.classList.add("project");
+        projectItem.classList.add(projectIndex);
         const projectName = document.createElement("h2");
         projectName.classList.add("project-name");
         projectName.textContent = project.name;
@@ -34,42 +33,27 @@ export default function display () {
         projectExpandBtn.classList.add("project-expand");
         projectExpandBtn.classList.add(projectIndex);
         projectExpandBtn.textContent = "Expand Project";
-        projectDiv.appendChild(projectName);
-        projectDiv.appendChild(projectExpandBtn);
-        projectItem.appendChild(projectDiv);
-        // const taskDiv = document.createElement("div");
-        // taskDiv.classList.add("tasks");
-        // const taskListDiv = document.createElement("ul");
-        // taskListDiv.classList.add("task-list");
-        // project.getTodo().forEach((task, taskIndex) => {
-        //     const taskItemDiv = document.createElement("li");
-        //     taskItemDiv.classList.add("task-item");
-        //     const taskTitle = document.createElement("span");
-        //     taskTitle.textContent = task.title;
-        //     const taskExpandBtn = document.createElement("button");
-        //     taskExpandBtn.classList.add("task-expand");
-        //     taskExpandBtn.classList.add(taskIndex);
-        //     taskExpandBtn.textContent = "Expand Task";
-        //     taskItemDiv.appendChild(taskTitle);
-        //     taskItemDiv.appendChild(taskExpandBtn);
-        //     taskListDiv.appendChild(taskItemDiv);
-        //     taskDiv.appendChild(taskListDiv);
-        //     projectItem.appendChild(taskDiv);
-        // })
+        projectItem.appendChild(projectName);
+        projectItem.appendChild(projectExpandBtn);
         projectsDiv.appendChild(projectItem);
+        projectItem.addEventListener("click", () => {
+            displayTask(project);
+        });
     });
-    const projectItem = document.createElement("div");
-    projectItem.classList.add("project-item");
+    const btnItem = document.createElement("div");
+    btnItem.classList.add("btn-item");
     const addProjectBtn = document.createElement("button");
     addProjectBtn.id = "project-add";
     addProjectBtn.textContent = "Add Project";
-    projectItem.appendChild(addProjectBtn);
-    projectsDiv.appendChild(projectItem);
-    container.appendChild(projectsDiv);
+    btnItem.appendChild(addProjectBtn);
+    projectsDiv.appendChild(btnItem);
     const taskDiv = document.createElement("div");
-    taskDiv.classList.add("tasks-list");
-
-
+    taskDiv.id = "task-list";
+    const content = document.createElement("div");
+    content.id = "content";
+    content.appendChild(projectsDiv);
+    content.appendChild(taskDiv);
+    container.appendChild(content);
     addProject();
 }
 
@@ -109,5 +93,30 @@ function addProject() {
                 form.style.display = 'none';
             }
           };
+    })
+}
+
+function displayTask(project){
+    // projectItem.appendChild(projectDiv);
+
+    const taskList = document.querySelector("#task-list");
+    while(taskList.firstChild){
+        taskList.removeChild(taskList.firstChild);
+    }
+    const taskListDiv = document.createElement("ul");
+    taskListDiv.classList.add("task-list");
+    project.getTodo().forEach((task, taskIndex) => {
+        const taskItemDiv = document.createElement("li");
+        taskItemDiv.classList.add("task-item");
+        const taskTitle = document.createElement("span");
+        taskTitle.textContent = task.title;
+        const taskExpandBtn = document.createElement("button");
+        taskExpandBtn.classList.add("task-expand");
+        taskExpandBtn.classList.add(taskIndex);
+        taskExpandBtn.textContent = "Expand Task";
+        taskItemDiv.appendChild(taskTitle);
+        taskItemDiv.appendChild(taskExpandBtn);
+        taskListDiv.appendChild(taskItemDiv);
+        taskList.appendChild(taskListDiv);
     })
 }
