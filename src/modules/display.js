@@ -1,5 +1,5 @@
 
-import Project from './project.js';
+// import Project from './project.js';
 import ProjectList from './defaults.js';
 
 const projectList = ProjectList();
@@ -41,7 +41,7 @@ export default function display () {
         });
     });
     const btnItem = document.createElement("div");
-    btnItem.classList.add("btn-item");
+    btnItem.id = "btn-item";
     const addProjectBtn = document.createElement("button");
     addProjectBtn.id = "project-add";
     addProjectBtn.textContent = "Add Project";
@@ -55,49 +55,10 @@ export default function display () {
     content.appendChild(taskDiv);
     container.appendChild(content);
     addProject();
-}
-
-
-function addProject() {
-    const projectListDiv = document.querySelector("#project-list");
-    const addProjectBtn = document.querySelector("#project-add");
-
-    addProjectBtn.addEventListener('click', (e) => {
-        addProjectBtn.style.display = "none";
-        const projectItem = document.createElement("div");
-        projectItem.classList.add("project-item");
-        const form = document.createElement("form");
-        const projectTitle = document.createElement("input");
-        projectTitle.id= "project-title";
-        projectTitle.setAttribute("placeholder", "What project are you working on? ");
-        projectTitle.required = true;
-        const submit = document.createElement("input");
-        submit.setAttribute("type", "submit");
-        const cancel = document.createElement("input");
-        cancel.setAttribute("type", "reset");
-        form.appendChild(projectTitle);
-        form.appendChild(submit);
-        form.appendChild(cancel);
-        projectItem.appendChild(form);
-        projectListDiv.appendChild(projectItem);
-        form.addEventListener("submit", (e) => {
-            e.preventDefault();
-            const project = Project(projectTitle.value);
-            projectList.addProject(project);
-            display(projectList);
-        });
-        document.onclick = function(e){
-            if(e.target !== projectTitle && e.target !== addProjectBtn){
-              //element clicked wasn't the form input; hide the form
-                addProjectBtn.style.display = "inline-block";
-                form.style.display = 'none';
-            }
-          };
-    })
+    displayTask(projectList.getProjectList()[0]);
 }
 
 function displayTask(project){
-    // projectItem.appendChild(projectDiv);
 
     const taskList = document.querySelector("#task-list");
     while(taskList.firstChild){
@@ -118,5 +79,43 @@ function displayTask(project){
         taskItemDiv.appendChild(taskExpandBtn);
         taskListDiv.appendChild(taskItemDiv);
         taskList.appendChild(taskListDiv);
+    })
+}
+
+
+function addProject() {
+    const projectListDiv = document.querySelector("#project-list");
+    const addProjectBtn = document.querySelector("#project-add");
+
+    addProjectBtn.addEventListener('click', (e) => {
+        addProjectBtn.style.display = "none";
+        const btnItem = document.querySelector("#btn-item");
+        const form = document.createElement("form");
+        const projectTitle = document.createElement("input");
+        projectTitle.id= "project-title";
+        projectTitle.setAttribute("placeholder", "What project are you working on? ");
+        projectTitle.required = true;
+        const submit = document.createElement("input");
+        submit.setAttribute("type", "submit");
+        const cancel = document.createElement("input");
+        cancel.setAttribute("type", "reset");
+        form.appendChild(projectTitle);
+        form.appendChild(submit);
+        form.appendChild(cancel);
+        btnItem.appendChild(form);
+        projectListDiv.appendChild(btnItem);
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const project = Project(projectTitle.value);
+            projectList.addProject(project);
+            display(projectList);
+        });
+        document.onclick = function(e){
+            if(e.target !== projectTitle && e.target !== addProjectBtn){
+              //element clicked wasn't the form input; hide the form
+                addProjectBtn.style.display = "inline-block";
+                form.remove();
+            }
+          };
     })
 }
