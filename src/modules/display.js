@@ -13,45 +13,49 @@ export default function display () {
     projectHeader.classList.add("project-header");
     const projectHeaderTitle = document.createElement("h1");
     projectHeaderTitle.textContent = "Todo List";
-    projectHeader.appendChild(projectHeaderTitle);    
+    const addTaskBtn = document.createElement("button");
+    addTaskBtn.id = "task-add";
+    addTaskBtn.textContent = "Add Task";
+    projectHeader.appendChild(projectHeaderTitle);
+    projectHeader.appendChild(addTaskBtn);    
     container.appendChild(projectHeader);
-    
     const projectsDiv = document.createElement("div");
     projectsDiv.id = "project-list";
     projectList.getProjectList().forEach((project, projectIndex) => {
         const projectItem = document.createElement("div");
         projectItem.classList.add("project-item");
-        const projectLi = document.createElement("div");
-        projectLi.classList.add("project");
+        const projectDiv = document.createElement("div");
+        projectDiv.classList.add("project");
         const projectName = document.createElement("h2");
         projectName.classList.add("project-name");
         projectName.textContent = project.name;
+        projectName.style.display = "inline-block";
         const projectExpandBtn = document.createElement("button");
         projectExpandBtn.classList.add("project-expand");
         projectExpandBtn.classList.add(projectIndex);
         projectExpandBtn.textContent = "Expand Project";
-        projectLi.appendChild(projectName);
-        projectLi.appendChild(projectExpandBtn);
-        projectItem.appendChild(projectLi);
-        const taskLi = document.createElement("div");
-        taskLi.classList.add("tasks");
-        const taskListDiv = document.createElement("ul");
-        taskListDiv.classList.add("task-list");
-        project.getTodo().forEach((task, taskIndex) => {
-            const taskItemDiv = document.createElement("li");
-            taskItemDiv.classList.add("task-item");
-            const taskTitle = document.createElement("span");
-            taskTitle.textContent = task.title;
-            const taskExpandBtn = document.createElement("button");
-            taskExpandBtn.classList.add("task-expand");
-            taskExpandBtn.classList.add(taskIndex);
-            taskExpandBtn.textContent = "Expand Task";
-            taskItemDiv.appendChild(taskTitle);
-            taskItemDiv.appendChild(taskExpandBtn);
-            taskListDiv.appendChild(taskItemDiv);
-            taskLi.appendChild(taskListDiv);
-            projectItem.appendChild(taskLi);
-        })
+        projectDiv.appendChild(projectName);
+        projectDiv.appendChild(projectExpandBtn);
+        projectItem.appendChild(projectDiv);
+        // const taskDiv = document.createElement("div");
+        // taskDiv.classList.add("tasks");
+        // const taskListDiv = document.createElement("ul");
+        // taskListDiv.classList.add("task-list");
+        // project.getTodo().forEach((task, taskIndex) => {
+        //     const taskItemDiv = document.createElement("li");
+        //     taskItemDiv.classList.add("task-item");
+        //     const taskTitle = document.createElement("span");
+        //     taskTitle.textContent = task.title;
+        //     const taskExpandBtn = document.createElement("button");
+        //     taskExpandBtn.classList.add("task-expand");
+        //     taskExpandBtn.classList.add(taskIndex);
+        //     taskExpandBtn.textContent = "Expand Task";
+        //     taskItemDiv.appendChild(taskTitle);
+        //     taskItemDiv.appendChild(taskExpandBtn);
+        //     taskListDiv.appendChild(taskItemDiv);
+        //     taskDiv.appendChild(taskListDiv);
+        //     projectItem.appendChild(taskDiv);
+        // })
         projectsDiv.appendChild(projectItem);
     });
     const projectItem = document.createElement("div");
@@ -62,6 +66,9 @@ export default function display () {
     projectItem.appendChild(addProjectBtn);
     projectsDiv.appendChild(projectItem);
     container.appendChild(projectsDiv);
+    const taskDiv = document.createElement("div");
+    taskDiv.classList.add("tasks-list");
+
 
     addProject();
 }
@@ -70,9 +77,6 @@ export default function display () {
 function addProject() {
     const projectListDiv = document.querySelector("#project-list");
     const addProjectBtn = document.querySelector("#project-add");
-
-
-    console.log(addProjectBtn);
 
     addProjectBtn.addEventListener('click', (e) => {
         addProjectBtn.style.display = "none";
@@ -85,8 +89,8 @@ function addProject() {
         projectTitle.required = true;
         const submit = document.createElement("input");
         submit.setAttribute("type", "submit");
-        const cancel = document.createElement("button");
-        cancel.innerText = "cancel";
+        const cancel = document.createElement("input");
+        cancel.setAttribute("type", "reset");
         form.appendChild(projectTitle);
         form.appendChild(submit);
         form.appendChild(cancel);
@@ -97,6 +101,13 @@ function addProject() {
             const project = Project(projectTitle.value);
             projectList.addProject(project);
             display(projectList);
-        })
+        });
+        document.onclick = function(e){
+            if(e.target !== projectTitle && e.target !== addProjectBtn){
+              //element clicked wasn't the form input; hide the form
+                addProjectBtn.style.display = "inline-block";
+                form.style.display = 'none';
+            }
+          };
     })
 }

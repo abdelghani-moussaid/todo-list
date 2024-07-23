@@ -6,7 +6,7 @@ export default function(){
     const task = Todo("Feed cat", "beef", "today", 1, false);
     const task2 = Todo("Run", "recovery run", "today", 1, false);
     const task3 = Todo("Study", "TOP JS", "today", 1, false);
-    const noProject = Project("No Project");
+    const noProject = Project("Default Project");
     const newProject = Project("New Project");
     noProject.addTodo(task);
     noProject.addTodo(task2);
