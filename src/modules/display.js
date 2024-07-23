@@ -1,15 +1,20 @@
-// import ProjectList from './defaults.js';
-import AddedProject from './events.js';
 
-export default function (projectList) {
+import Project from './project.js';
+import ProjectList from './defaults.js';
+
+const projectList = ProjectList();
+
+export default function display () {
     const container = document.querySelector("#container");
+    while(container.firstChild){
+        container.removeChild(container.firstChild);
+    }
     const projectHeader = document.createElement("div");
     projectHeader.classList.add("project-header");
     const projectHeaderTitle = document.createElement("h1");
     projectHeaderTitle.textContent = "Todo List";
     projectHeader.appendChild(projectHeaderTitle);    
     container.appendChild(projectHeader);
-    // const projectList = ProjectList();
     
     const projectsDiv = document.createElement("div");
     projectsDiv.id = "project-list";
@@ -57,4 +62,41 @@ export default function (projectList) {
     projectItem.appendChild(addProjectBtn);
     projectsDiv.appendChild(projectItem);
     container.appendChild(projectsDiv);
+
+    addProject();
+}
+
+
+function addProject() {
+    const projectListDiv = document.querySelector("#project-list");
+    const addProjectBtn = document.querySelector("#project-add");
+
+
+    console.log(addProjectBtn);
+
+    addProjectBtn.addEventListener('click', (e) => {
+        addProjectBtn.style.display = "none";
+        const projectItem = document.createElement("div");
+        projectItem.classList.add("project-item");
+        const form = document.createElement("form");
+        const projectTitle = document.createElement("input");
+        projectTitle.id= "project-title";
+        projectTitle.setAttribute("placeholder", "What project are you working on? ");
+        projectTitle.required = true;
+        const submit = document.createElement("input");
+        submit.setAttribute("type", "submit");
+        const cancel = document.createElement("button");
+        cancel.innerText = "cancel";
+        form.appendChild(projectTitle);
+        form.appendChild(submit);
+        form.appendChild(cancel);
+        projectItem.appendChild(form);
+        projectListDiv.appendChild(projectItem);
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const project = Project(projectTitle.value);
+            projectList.addProject(project);
+            display(projectList);
+        })
+    })
 }
