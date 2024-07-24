@@ -74,7 +74,7 @@ function displayTask(project, index){
         const taskTitle = document.createElement("span");
         taskTitle.textContent = task.title;
         const dueDate = document.createElement("span");
-        dueDate.textContent = format(task.dueDate, "E M MMM");
+        dueDate.textContent = format(task.dueDate, "E d MMM");
         const taskExpandBtn = document.createElement("button");
         taskExpandBtn.classList.add("task-expand");
         taskExpandBtn.classList.add(taskIndex);
@@ -118,7 +118,6 @@ function addProject() {
             display(projectList.getProjectList().length - 1);
         });
         cancel.addEventListener("click", () => {
-              //element clicked wasn't the form input; hide the form
                 addProjectBtn.style.display = "inline-block";
                 form.remove();
           });
@@ -127,17 +126,12 @@ function addProject() {
 
 function addTask(){
     const taskResetBtn = document.querySelector("#task-reset");
-
-    // Get the modal
     const modal = document.getElementById("myModal");
     const expandModal = document.getElementById("expand-modal");
-    // Get the button that opens the modal
     const addTaskBtn = document.querySelector("#task-add");
-    // When the user clicks the button, open the modal 
     addTaskBtn.onclick = function() {
         modal.style.display = "block";
     }
-    // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
         if (event.target == modal)  {
             modal.style.display = "none";
@@ -151,18 +145,6 @@ function addTask(){
         modal.style.display = "none";
     })
     const form = document.querySelector("#task-form");
-    // const select = document.querySelector("#task-form-project");
-    // while(select.firstChild){
-    //     select.removeChild(select.firstChild);
-    // }
-    // projectList.getProjectList().forEach((project, index) => {
-    //     const option = document.createElement("option");
-    //     option.classList.add("option");
-    //     option.classList.add(index);
-    //     option.value = index;
-    //     option.innerText = project.name;
-    //     select.appendChild(option);
-    // });
     addTaskBtn.addEventListener("click", () => {  
         form.addEventListener("submit", (e) =>{
             form.checkValidity();     
@@ -171,15 +153,11 @@ function addTask(){
             const title = document.querySelector("#task-form-title");
             const description = document.querySelector("#task-form-description");
             const dueDate = document.querySelector("#task-form-due-date");
-            const dueDateFormat = format(dueDate.value, "E M MMM");
-
+            // const dueDateFormat = format(dueDate.value, "E M MMM");
+            const dueDateFormat = new Date(dueDate.value);
             const priority = document.querySelector("#task-form-priority");
-            // const projectIndex = document.querySelector("#task-form-project");
             const todo = Todo(title.value, description.value, dueDateFormat, priority.value, false);
-
             const index = document.querySelector(".task-list").classList[1];  
-            // const index = projectIndex.value;
-
             const project = projectList.getProjectList()[index];
             project.addTodo(todo);   
             form.reset(); 
@@ -192,18 +170,8 @@ function addTask(){
 function expandTask(project) {
     
     const form = document.querySelector("#expand-task");
-    // Get the modal
     const modal = document.getElementById("expand-modal");
-
-    // Get the button that opens the modal
     const expandBtn = document.querySelectorAll(".task-expand");
-
-
-    // taskResetBtn.addEventListener("click", ()=> {
-    //     modal.style.display = "none";
-    // })
-
-    // When the user clicks the button, open the modal 
     expandBtn.forEach((btn) => {
         btn.addEventListener('click', (e) => {
             modal.style.display = "block";
@@ -213,8 +181,6 @@ function expandTask(project) {
             document.getElementById("task-expand-priority").value =  todo.priority;
             document.getElementById("task-expand-due-date").value = date;
             document.getElementById("task-expand-description").innerText = todo.description;
-            // document.getElementById("task-expand-project").setAttribute("value", todo.project);
-            // modal.style.display = "block";
         })
     })
 }
