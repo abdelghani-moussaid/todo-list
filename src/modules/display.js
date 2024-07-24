@@ -153,13 +153,12 @@ function addTask(){
             const title = document.querySelector("#task-form-title");
             const description = document.querySelector("#task-form-description");
             const dueDate = document.querySelector("#task-form-due-date");
-            // const dueDateFormat = format(dueDate.value, "E M MMM");
             const dueDateFormat = new Date(dueDate.value);
             const priority = document.querySelector("#task-form-priority");
             const todo = Todo(title.value, description.value, dueDateFormat, priority.value, false);
             const index = document.querySelector(".task-list").classList[1];  
             const project = projectList.getProjectList()[index];
-            project.addTodo(todo);   
+            project.addTodo(todo);
             form.reset(); 
             modal.style.display = "none";
             display(index);
@@ -181,8 +180,25 @@ function expandTask(project) {
             document.getElementById("task-expand-priority").value =  todo.priority;
             document.getElementById("task-expand-due-date").value = date;
             document.getElementById("task-expand-description").innerText = todo.description;
-        })
-    })
+            const editBtn = document.querySelector("#task-edit");
+            editBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                todo.title = document.getElementById("task-expand-title").value;
+                todo.priority = document.getElementById("task-expand-priority").value;
+                todo.description = document.getElementById("task-expand-description").innerText;
+                todo.dueDate = document.getElementById("task-expand-due-date").value;
+                modal.style.display = "none";
+                display(btn.classList[1]);
+            });
+            const deleteBtn = document.querySelector("#task-delete");
+            deleteBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                project.deleteTodo(btn.classList[1]);
+                modal.style.display = "none";
+                display(btn.classList[1]);
+            })
+        });
+    });
 }
 
 
