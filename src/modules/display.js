@@ -1,5 +1,3 @@
-
-// import Project from './project.js';
 import ProjectList from './defaults.js';
 
 const projectList = ProjectList();
@@ -55,11 +53,11 @@ export default function display () {
     content.appendChild(taskDiv);
     container.appendChild(content);
     addProject();
+    addTask();
     displayTask(projectList.getProjectList()[0]);
 }
 
 function displayTask(project){
-
     const taskList = document.querySelector("#task-list");
     while(taskList.firstChild){
         taskList.removeChild(taskList.firstChild);
@@ -71,11 +69,14 @@ function displayTask(project){
         taskItemDiv.classList.add("task-item");
         const taskTitle = document.createElement("span");
         taskTitle.textContent = task.title;
+        const dueDate = document.createElement("span");
+        dueDate.textContent = task.dueDate;
         const taskExpandBtn = document.createElement("button");
         taskExpandBtn.classList.add("task-expand");
         taskExpandBtn.classList.add(taskIndex);
         taskExpandBtn.textContent = "Expand Task";
         taskItemDiv.appendChild(taskTitle);
+        taskItemDiv.appendChild(dueDate);
         taskItemDiv.appendChild(taskExpandBtn);
         taskListDiv.appendChild(taskItemDiv);
         taskList.appendChild(taskListDiv);
@@ -86,6 +87,22 @@ function displayTask(project){
 function addProject() {
     const projectListDiv = document.querySelector("#project-list");
     const addProjectBtn = document.querySelector("#project-add");
+
+    // Get the modal
+    const modal = document.getElementById("myModal");
+    // Get the button that opens the modal
+    const addTaskBtn = document.querySelector("#task-add");
+    // When the user clicks the button, open the modal 
+    addTaskBtn.onclick = function() {
+        modal.style.display = "block";
+    }
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
 
     addProjectBtn.addEventListener('click', (e) => {
         addProjectBtn.style.display = "none";
@@ -119,3 +136,9 @@ function addProject() {
           };
     })
 }
+
+function addTask(){
+
+    
+}
+

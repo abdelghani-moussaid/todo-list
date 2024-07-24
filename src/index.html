@@ -6,8 +6,32 @@
     <title>Todo List</title>
 </head>
 <body>
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <form>
+                <!-- title, description, dueDate, priority, isComplete -->
+                <label for="title">Title</label>
+                <input type="text" id="title">
+                <label for="description">Description</label>
+                <textarea name="description" id="description"></textarea>
+                <label for="due-date">Due Date</label>
+                <input type="date" name="due-date" id="due-date">
+                <label for="priority">Priority</label>
+                <input type="number" id="priority">
+                <select name="project" id="select-project">
+                    
+                </select>
+                <input type="submit" value="submit">
+                <input type="reset" value="clear">
+            </form>
+        </div>
+    
+    </div>
     <div id="container">
-        
+
     </div>
 </body>
 </html>
