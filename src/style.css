@@ -86,12 +86,17 @@ input {
   }
 
   /* Forms */ 
-  input, textarea {
+  #task-form input, #task-form textarea, #task-form select {
     width: 96%;
     padding: 6px;
     margin-top: 6px;
   }
-  form {
+
+  #task-form select { 
+    width: 100%;
+  }
+
+  #task-form {
     width: 350px;
     padding: 20px 50px;
     background-color: #f1f1f1;
@@ -101,7 +106,7 @@ input {
     font-weight: 900;
   }
 
-  input[type="submit"],  input[type="reset"] {
+  #task-form input[type="submit"], #task-form input[type="reset"] {
     background-color: rgb(9, 155, 106);
     width: 100%;
     border-style: none;
@@ -112,21 +117,21 @@ input {
     font-weight: 600;
   }
 
-  input[type="reset"] {
+  #task-form input[type="reset"] {
     background-color: rgb(155, 31, 9);
   }
 
-  input[type="reset"]:hover {
+  #task-form input[type="reset"]:hover {
     background-color: rgb(83, 17, 4);
     cursor: pointer;
   }
 
-  input[type="submit"]:hover {
+  #task-form input[type="submit"]:hover {
     background-color: rgb(4, 83, 57);
     cursor: pointer;
   }
 
-  input[type=text]:focus, textarea:focus {
+  #task-form input[type=text]:focus, #task-form textarea:focus {
     border: 3px solid #555;
   }
 

@@ -11,21 +11,27 @@
 
         <!-- Modal content -->
         <div class="modal-content">
-            <form>
+            <form id="task-form">
                 <!-- title, description, dueDate, priority, isComplete -->
-                <label for="title">Title</label>
-                <input type="text" id="title">
-                <label for="description">Description</label>
-                <textarea name="description" id="description"></textarea>
-                <label for="due-date">Due Date</label>
-                <input type="date" name="due-date" id="due-date">
-                <label for="priority">Priority</label>
-                <input type="number" id="priority">
-                <select name="project" id="select-project">
+                <label for="task-form-title">Title</label>
+                <input type="text" id="task-form-title" required>
+                <label for="task-form-description">Description</label>
+                <textarea name="description" id="task-form-description"></textarea>
+                <label for="task-form-due-date" >Due Date</label>
+                <input type="datetime-local" name="dueDate" id="task-form-due-date" required>
+                <label for="task-form-priority">Priority</label>
+                <select name="priority" id="task-form-priority">
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                </select>
+
+                <label for="task-form-project" >Project</label>
+                <select name="project" id="task-form-project">
                     
                 </select>
-                <input type="submit" value="submit">
-                <input type="reset" value="clear">
+                <input id="task-submit" type="submit" value="submit">
+                <input id="task-reset" type="reset" value="clear">
             </form>
         </div>
     

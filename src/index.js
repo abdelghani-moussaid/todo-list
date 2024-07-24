@@ -3,5 +3,5 @@ import './style.css';
 // import Events from './modules/events.js';
 // import ProjectList from './modules/defaults.js';
 
-Display();
+Display(0);
 // Events();
