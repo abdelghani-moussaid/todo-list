@@ -3,11 +3,11 @@ import Project from './project.js';
 import ProjectList from './projectList.js';
 
 export default function(){
-    const task = Todo("Feed cat", "beef", "today", 1, false);
-    const task2 = Todo("Run", "recovery run", "today", 1, false);
-    const task3 = Todo("Study", "TOP JS", "today", 1, false);
-    const noProject = Project("Default Project");
-    const newProject = Project("New Project");
+    const task = Todo("Feed cat", "beef", Date.now(), "high", false);
+    const task2 = Todo("Run", "recovery run", Date.now(), "medium", false);
+    const task3 = Todo("Study", "TOP JS", Date.now(), "low", false);
+    const noProject = Project("Main");
+    const newProject = Project("The Odin Project");
     noProject.addTodo(task);
     noProject.addTodo(task2);
     newProject.addTodo(task3)

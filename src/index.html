@@ -12,26 +12,50 @@
         <!-- Modal content -->
         <div class="modal-content">
             <form id="task-form">
-                <!-- title, description, dueDate, priority, isComplete -->
-                <label for="task-form-title">Title</label>
-                <input type="text" id="task-form-title" required>
-                <label for="task-form-description">Description</label>
-                <textarea name="description" id="task-form-description"></textarea>
-                <label for="task-form-due-date" >Due Date</label>
-                <input type="datetime-local" name="dueDate" id="task-form-due-date" required>
-                <label for="task-form-priority">Priority</label>
-                <select name="priority" id="task-form-priority">
-                    <option value="high">High</option>
-                    <option value="medium">Medium</option>
-                    <option value="low">Low</option>
-                </select>
-
-                <label for="task-form-project" >Project</label>
+                <input type="text" id="task-form-title" placeholder="Task Title" required>
+                <div id="task-specify">
+                    <select name="priority" id="task-form-priority">
+                        <option value="low" selected>low</option>
+                        <option value="medium">medium</option>
+                        <option value="high">high</option>
+                    </select>
+                    <input type="date" name="dueDate" id="task-form-due-date" required>
+                </div>
+                <textarea name="description" id="task-form-description" placeholder="Describe what you are working on!"></textarea>
                 <select name="project" id="task-form-project">
                     
                 </select>
-                <input id="task-submit" type="submit" value="submit">
-                <input id="task-reset" type="reset" value="clear">
+                <div id="task-form-button">
+                    <button id="task-reset" type="reset">cancel</button>
+                    <button id="task-submit" type="submit">save</button>
+                </div>
+            </form>
+        </div>
+    
+    </div>
+    <!-- The Modal -->
+    <div id="expand-modal" class="expand-modal">
+
+        <!-- Modal content -->
+        <div class="modal-expand-content">
+            <form id="expand-task">
+                <input type="text" id="task-expand-title" placeholder="Task Title" value = "">
+                <div id="task-specify">
+                    <select name="priority" id="task-expand-priority">
+                        <option value="low">low</option>
+                        <option value="medium">medium</option>
+                        <option value="high">high</option>
+                    </select>
+                    <input type="date" name="dueDate" id="task-expand-due-date" required>
+                </div>
+                <textarea name="description" id="task-expand-description" placeholder="Describe what you are working on!"></textarea>
+                <select name="project" id="task-expand-project">
+                    
+                </select>
+                <div id="task-expand-button">
+                    <button id="task-reset" type="reset">delete</button>
+                    <button id="task-submit" type="submit">save</button>
+                </div>
             </form>
         </div>
     

@@ -30,15 +30,11 @@ export default function display(index) {
         projectName.classList.add("project-name");
         projectName.textContent = project.name;
         projectName.style.display = "inline-block";
-        const projectExpandBtn = document.createElement("button");
-        projectExpandBtn.classList.add("project-expand");
-        projectExpandBtn.classList.add(projectIndex);
-        projectExpandBtn.textContent = "Expand Project";
         projectItem.appendChild(projectName);
-        projectItem.appendChild(projectExpandBtn);
         projectsDiv.appendChild(projectItem);
         projectItem.addEventListener("click", () => {
             displayTask(project, projectIndex);
+            expandTask(project);
         });
     });
     const btnItem = document.createElement("div");
@@ -58,6 +54,7 @@ export default function display(index) {
     addProject();
     const project = projectList.getProjectList();
     displayTask(project[index], index);
+    expandTask(project[index]);
     addTask();
 }
 
@@ -67,27 +64,6 @@ function displayTask(project, index){
     while(taskList.firstChild){
         taskList.removeChild(taskList.firstChild);
     }
-
-    const taskResetBtn = document.querySelector("#task-reset");
-
-    // Get the modal
-    const modal = document.getElementById("myModal");
-    // Get the button that opens the modal
-    const addTaskBtn = document.querySelector("#task-add");
-    // When the user clicks the button, open the modal 
-    addTaskBtn.onclick = function() {
-        modal.style.display = "block";
-    }
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-
-    taskResetBtn.addEventListener("click", ()=> {
-        modal.style.display = "none";
-    })
     
     const taskListDiv = document.createElement("ul");
     taskListDiv.classList.add("task-list");
@@ -98,7 +74,7 @@ function displayTask(project, index){
         const taskTitle = document.createElement("span");
         taskTitle.textContent = task.title;
         const dueDate = document.createElement("span");
-        dueDate.textContent = task.dueDate;
+        dueDate.textContent = format(task.dueDate, "E M MMM");
         const taskExpandBtn = document.createElement("button");
         taskExpandBtn.classList.add("task-expand");
         taskExpandBtn.classList.add(taskIndex);
@@ -120,7 +96,7 @@ function addProject() {
     addProjectBtn.addEventListener('click', (e) => {
         addProjectBtn.style.display = "none";
         const btnItem = document.querySelector("#btn-item");
-        const form = document.createElement("form");
+        const form = document.createElement("div");
         const projectTitle = document.createElement("input");
         projectTitle.id= "project-title";
         projectTitle.setAttribute("placeholder", "What project are you working on? ");
@@ -129,13 +105,13 @@ function addProject() {
         submit.setAttribute("type", "submit");
         const cancel = document.createElement("input");
         cancel.setAttribute("type", "reset");
-        cancel.value = "clear";
+        cancel.value = "cancel";
         form.appendChild(projectTitle);
         form.appendChild(submit);
         form.appendChild(cancel);
         btnItem.appendChild(form);
         projectListDiv.appendChild(btnItem);
-        form.addEventListener("submit", (e) => {
+        submit.addEventListener("click", (e) => {
             e.preventDefault();
             const project = Project(projectTitle.value);
             projectList.addProject(project);
@@ -150,15 +126,35 @@ function addProject() {
 }
 
 function addTask(){
+    const taskResetBtn = document.querySelector("#task-reset");
+
+    // Get the modal
+    const modal = document.getElementById("myModal");
+    const expandModal = document.getElementById("expand-modal");
+    // Get the button that opens the modal
+    const addTaskBtn = document.querySelector("#task-add");
+    // When the user clicks the button, open the modal 
+    addTaskBtn.onclick = function() {
+        modal.style.display = "block";
+    }
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal)  {
+            modal.style.display = "none";
+        }
+        else if ( event.target == expandModal ){
+            expandModal.style.display = "none";
+        }
+    }
+
+    taskResetBtn.addEventListener("click", ()=> {
+        modal.style.display = "none";
+    })
     const form = document.querySelector("#task-form");
     const select = document.querySelector("#task-form-project");
-    const taskSubmit = document.querySelector("#task-submit");
-    
     while(select.firstChild){
         select.removeChild(select.firstChild);
     }
-    const addTaskBtn = document.querySelector("#task-add");
-    const modal = document.getElementById("myModal");
     projectList.getProjectList().forEach((project, index) => {
         const option = document.createElement("option");
         option.classList.add("option");
@@ -186,12 +182,10 @@ function addTask(){
         const title = document.querySelector("#task-form-title");
         const description = document.querySelector("#task-form-description");
         const dueDate = document.querySelector("#task-form-due-date");
-        // const formatDueDate = format(dueDate.value, "MM/dd/yyyy");
-        const dueDateFormat = format(dueDate.value, "Pp");
+        const dueDateFormat = format(dueDate.value, "E M MMM");
 
         const priority = document.querySelector("#task-form-priority");
         const projectIndex = document.querySelector("#task-form-project");
-        const optionSelected = document.querySelector(".option");
         const todo = Todo(title.value, description.value, dueDateFormat, priority.value, false);
 
         const index = projectIndex.value;
@@ -202,4 +196,36 @@ function addTask(){
         display(index);
     })
 }
+
+function expandTask(project) {
+    
+    const form = document.querySelector("#expand-task");
+    // Get the modal
+    const modal = document.getElementById("expand-modal");
+
+    // Get the button that opens the modal
+    const expandBtn = document.querySelectorAll(".task-expand");
+
+
+    // taskResetBtn.addEventListener("click", ()=> {
+    //     modal.style.display = "none";
+    // })
+
+    // When the user clicks the button, open the modal 
+    expandBtn.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            modal.style.display = "block";
+            const todo = project.getTodo()[btn.classList[1]];
+            const date = format(todo.dueDate, 'uuuu-MM-dd');
+            document.getElementById("task-expand-title").value = todo.title;
+            console.log(todo.priority)
+            document.getElementById("task-expand-priority").value =  todo.priority;
+            document.getElementById("task-expand-due-date").value = date;
+            document.getElementById("task-expand-description").innerText = todo.description;
+            // document.getElementById("task-expand-project").setAttribute("value", todo.project);
+            // modal.style.display = "block";
+        })
+    })
+}
+
 
