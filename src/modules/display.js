@@ -151,49 +151,41 @@ function addTask(){
         modal.style.display = "none";
     })
     const form = document.querySelector("#task-form");
-    const select = document.querySelector("#task-form-project");
-    while(select.firstChild){
-        select.removeChild(select.firstChild);
-    }
-    projectList.getProjectList().forEach((project, index) => {
-        const option = document.createElement("option");
-        option.classList.add("option");
-        option.classList.add(index);
-        option.value = index;
-        option.innerText = project.name;
-        select.appendChild(option);
-    });
+    // const select = document.querySelector("#task-form-project");
+    // while(select.firstChild){
+    //     select.removeChild(select.firstChild);
+    // }
+    // projectList.getProjectList().forEach((project, index) => {
+    //     const option = document.createElement("option");
+    //     option.classList.add("option");
+    //     option.classList.add(index);
+    //     option.value = index;
+    //     option.innerText = project.name;
+    //     select.appendChild(option);
+    // });
+    addTaskBtn.addEventListener("click", () => {  
+        form.addEventListener("submit", (e) =>{
+            form.checkValidity();     
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            const title = document.querySelector("#task-form-title");
+            const description = document.querySelector("#task-form-description");
+            const dueDate = document.querySelector("#task-form-due-date");
+            const dueDateFormat = format(dueDate.value, "E M MMM");
 
-    addTaskBtn.addEventListener("click", () => {
-        const taskList = document.querySelector(".task-list");
-        const options = document.querySelectorAll(".option");
-        options.forEach(option => {
-            if(option.classList[1] === taskList.classList[1]){
-                option.setAttribute('selected', true);
-            }
-        });
-  
-    })
-    
-    form.addEventListener("submit", (e) =>{
-        form.checkValidity();     
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        const title = document.querySelector("#task-form-title");
-        const description = document.querySelector("#task-form-description");
-        const dueDate = document.querySelector("#task-form-due-date");
-        const dueDateFormat = format(dueDate.value, "E M MMM");
+            const priority = document.querySelector("#task-form-priority");
+            // const projectIndex = document.querySelector("#task-form-project");
+            const todo = Todo(title.value, description.value, dueDateFormat, priority.value, false);
 
-        const priority = document.querySelector("#task-form-priority");
-        const projectIndex = document.querySelector("#task-form-project");
-        const todo = Todo(title.value, description.value, dueDateFormat, priority.value, false);
+            const index = document.querySelector(".task-list").classList[1];  
+            // const index = projectIndex.value;
 
-        const index = projectIndex.value;
-        const project = projectList.getProjectList()[projectIndex.value];
-        project.addTodo(todo);   
-        form.reset(); 
-        modal.style.display = "none";
-        display(index);
+            const project = projectList.getProjectList()[index];
+            project.addTodo(todo);   
+            form.reset(); 
+            modal.style.display = "none";
+            display(index);
+        })
     })
 }
 
@@ -218,7 +210,6 @@ function expandTask(project) {
             const todo = project.getTodo()[btn.classList[1]];
             const date = format(todo.dueDate, 'uuuu-MM-dd');
             document.getElementById("task-expand-title").value = todo.title;
-            console.log(todo.priority)
             document.getElementById("task-expand-priority").value =  todo.priority;
             document.getElementById("task-expand-due-date").value = date;
             document.getElementById("task-expand-description").innerText = todo.description;
