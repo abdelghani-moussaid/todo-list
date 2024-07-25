@@ -40,8 +40,10 @@ export default function display(index) {
             displayTask(project, projectIndex);
             expandTask();
         });
-        deleteProjectButton.addEventListener("click", () => {
+        deleteProjectButton.addEventListener("click", (e) => {
+            e.stopImmediatePropagation();
             if(confirm("Want to delete?\n All project tasks will lost!")){
+                project.empty();
                 projectList.deleteProject(projectItem);
                 display(0);
             }
