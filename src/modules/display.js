@@ -191,12 +191,9 @@ function expandTask() {
             editBtn.addEventListener("click", (e) => {
                 e.preventDefault();
                 e.stopImmediatePropagation();
-                // const editBtn = document.querySelector("#task-edit");
                 const projectIndex = document.querySelector(".task-list").classList[1];
                 const project = projectList.getProjectList()[projectIndex];
                 const todo = project.getTodo()[editBtn.className];
-                // console.log(todo2);
-                // const task = project.getTodo()[editBtn.className]; 
                 todo.title = document.getElementById("task-expand-title").value;
                 todo.priority = document.getElementById("task-expand-priority").value;
                 todo.description = document.getElementById("task-expand-description").value;
@@ -205,11 +202,16 @@ function expandTask() {
                 display(projectIndex);
             });
             const deleteBtn = document.querySelector("#task-delete");
+            deleteBtn.className = "";
+            deleteBtn.className = btn.classList[1];
             deleteBtn.addEventListener("click", (e) => {
                 e.preventDefault();
-                // project.deleteTodo(btn.classList[1]);
+                e.stopImmediatePropagation();
+                const projectIndex = document.querySelector(".task-list").classList[1];
+                const project = projectList.getProjectList()[projectIndex];
+                project.deleteTodo(deleteBtn.className);
                 modal.style.display = "none";
-                // display(index);
+                display(projectIndex);
             })
         });
     });
