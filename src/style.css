@@ -61,14 +61,16 @@ button {
 
 
 #content {
-    display: grid;
-    grid-template-columns: 1fr 3fr;
+  flex: 1;
+    display: flex;
+    /* grid-template-columns: 1fr 4fr; */
 }
-.project-item, #btn-item {
+.project-item{
     border: 1px solid orangered;
     cursor: pointer;
     margin: 20px 0;
-    height: 100px;
+    /* height: 100px; */
+    min-width: fit-content;
 }
 #btn-item {
     cursor: auto;
@@ -216,4 +218,74 @@ input {
 
   input[type="checkbox"] {
     width: 15px;
+  }
+
+  .task-item {
+    display: flex;
+    padding: 6px;
+    margin: 6px;
+    gap: 6px;
+    justify-content: flex-start;
+    max-width: 35em;
+    min-width: fit-content;
+  }
+
+  span:nth-child(2) {
+    flex: 1;
+    /* flex-shrink: 0; */
+  }
+
+  #project-delete, #project-add, #task-add, .task-expand {
+    background: url(./icons/trash.svg);
+    background-repeat: no-repeat;
+    height: 25px;
+    width: 25px;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .project-item {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .project-item h2 {
+    font-size: 1.2rem;
+  }
+  #project-add, #task-add  {
+    background: url(./icons/plus-circle.svg);
+    background-repeat: no-repeat;
+  }
+  .task-expand {
+    background: url(./icons/maximize.svg);
+    background-repeat: no-repeat;
+  }
+  #add-project-item, #add-task-item {
+    display: flex;
+    align-items: center;
+    /* cursor: pointer; */
+    margin: 20px 0;
+    gap: 10px;
+    flex-wrap: wrap;
+
+  }
+  #project-list {
+    flex: 1;
+    padding: 6px;
+  }
+  #task-list {
+    flex: 3;
+    padding: 6px;
+  }
+
+  main {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }

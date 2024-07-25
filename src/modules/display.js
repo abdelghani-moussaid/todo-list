@@ -14,12 +14,10 @@ export default function display(index) {
     const projectHeader = document.createElement("div");
     projectHeader.classList.add("project-header");
     const projectHeaderTitle = document.createElement("h1");
-    projectHeaderTitle.textContent = "Todo List";
-    const addTaskBtn = document.createElement("button");
-    addTaskBtn.id = "task-add";
-    addTaskBtn.textContent = "Add Task";
+    projectHeaderTitle.textContent = "Let's To Do";
+
     projectHeader.appendChild(projectHeaderTitle);
-    projectHeader.appendChild(addTaskBtn);    
+    // projectHeader.appendChild(addTaskBtn);    
     container.appendChild(projectHeader);
     const projectsDiv = document.createElement("div");
     projectsDiv.id = "project-list";
@@ -30,16 +28,14 @@ export default function display(index) {
         const projectName = document.createElement("h2");
         projectName.classList.add("project-name");
         projectName.textContent = project.name;
-        projectName.style.display = "inline-block";
         const deleteProjectButton = document.createElement("button");
         deleteProjectButton.id = "project-delete";
-        deleteProjectButton.textContent = "Delete Project";
+        // deleteProjectButton.textContent = "Delete Project";
         projectItem.appendChild(projectName);
         projectItem.appendChild(deleteProjectButton);
         projectsDiv.appendChild(projectItem);
         projectItem.addEventListener("click", () => {
             displayTask(project, projectIndex);
-            expandTask();
         });
         deleteProjectButton.addEventListener("click", (e) => {
             e.stopImmediatePropagation();
@@ -52,11 +48,13 @@ export default function display(index) {
         })
     });
     const btnItem = document.createElement("div");
-    btnItem.id = "btn-item";
+    btnItem.id = "add-project-item";
     const addProjectBtn = document.createElement("button");
     addProjectBtn.id = "project-add";
-    addProjectBtn.textContent = "Add Project";
+    const addProjectSpan = document.createElement("span");
+    addProjectSpan.textContent = "Add Project";
     btnItem.appendChild(addProjectBtn);
+    btnItem.appendChild(addProjectSpan);
     projectsDiv.appendChild(btnItem);
     const taskDiv = document.createElement("div");
     taskDiv.id = "task-list";
@@ -68,8 +66,6 @@ export default function display(index) {
     addProject();
     const project = projectList.getProjectList();
     displayTask(project[index], index);
-    expandTask();
-    addTask();
 }
 
 function displayTask(project, index){
@@ -78,7 +74,10 @@ function displayTask(project, index){
     while(taskList.firstChild){
         taskList.removeChild(taskList.firstChild);
     }
-    
+    const projectName = document.createElement("h2");
+    projectName.classList.add("project-name");
+    projectName.textContent = project.name;
+
     const taskListDiv = document.createElement("ul");
     taskListDiv.classList.add("task-list");
     taskListDiv.classList.add(index);
@@ -91,11 +90,11 @@ function displayTask(project, index){
             const taskTitle = document.createElement("span");
             taskTitle.textContent = task.title;
             const dueDate = document.createElement("span");
-            dueDate.textContent = format(task.dueDate, "EEEE d MMM");
+            dueDate.textContent = format(task.dueDate, "E d MMM");
             const taskExpandBtn = document.createElement("button");
             taskExpandBtn.classList.add("task-expand");
             taskExpandBtn.classList.add(taskIndex);
-            taskExpandBtn.textContent = "Expand Task";
+            // taskExpandBtn.textContent = "Expand Task";
             taskItemDiv.appendChild(markAsComplete);
             taskItemDiv.appendChild(taskTitle);
             taskItemDiv.appendChild(dueDate);
@@ -111,9 +110,23 @@ function displayTask(project, index){
                     task.isComplete = false;
                 }
             })
-        })
+        });
+        const addTaskItem = document.createElement("div");
+        addTaskItem.id = "add-task-item";
+        const addTaskBtn = document.createElement("button");
+        addTaskBtn.id = "task-add";
+        // addTaskBtn.textContent = "Add Task";
+        const addTaskSpan = document.createElement("span");
+        addTaskSpan.textContent = "Add Task";
+        taskList.appendChild(projectName);
         taskList.appendChild(taskListDiv);
+        addTaskItem.appendChild(addTaskBtn);
+        addTaskItem.appendChild(addTaskSpan);
+        taskList.appendChild(addTaskItem);
+        addTask();
+        expandTask();
     }
+
     
 }
 
@@ -122,9 +135,9 @@ function addProject() {
     const projectListDiv = document.querySelector("#project-list");
     const addProjectBtn = document.querySelector("#project-add");
 
-    addProjectBtn.addEventListener('click', (e) => {
+    addProjectBtn.addEventListener("click", (e) => {
         addProjectBtn.style.display = "none";
-        const btnItem = document.querySelector("#btn-item");
+        const btnItem = document.querySelector("#add-project-item");
         const form = document.createElement("div");
         const projectTitle = document.createElement("input");
         projectTitle.id= "project-title";
@@ -149,7 +162,7 @@ function addProject() {
         cancel.addEventListener("click", () => {
                 addProjectBtn.style.display = "inline-block";
                 form.remove();
-          });
+        });
     })
 }
 
