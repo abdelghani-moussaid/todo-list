@@ -86,18 +86,31 @@ function displayTask(project, index){
         project.getTodo().forEach((task, taskIndex) => {
             const taskItemDiv = document.createElement("li");
             taskItemDiv.classList.add("task-item");
+            const markAsComplete = document.createElement("input");
+            markAsComplete.setAttribute("type", "checkbox");
             const taskTitle = document.createElement("span");
             taskTitle.textContent = task.title;
             const dueDate = document.createElement("span");
-            dueDate.textContent = format(task.dueDate, "E d MMM");
+            dueDate.textContent = format(task.dueDate, "EEEE d MMM");
             const taskExpandBtn = document.createElement("button");
             taskExpandBtn.classList.add("task-expand");
             taskExpandBtn.classList.add(taskIndex);
             taskExpandBtn.textContent = "Expand Task";
+            taskItemDiv.appendChild(markAsComplete);
             taskItemDiv.appendChild(taskTitle);
             taskItemDiv.appendChild(dueDate);
             taskItemDiv.appendChild(taskExpandBtn);
             taskListDiv.appendChild(taskItemDiv);
+            markAsComplete.addEventListener("click", (e) => {
+                e.stopImmediatePropagation();
+                if(markAsComplete.checked){
+                    taskTitle.style.textDecoration = "line-through";
+                    task.isComplete = true;
+                } else {
+                    taskTitle.style.textDecoration = "none";
+                    task.isComplete = false;
+                }
+            })
         })
         taskList.appendChild(taskListDiv);
     }
@@ -180,7 +193,7 @@ function addTask(){
             })
         }
         else {
-            alert("Please add a project!")
+            alert("Oops, Your project list is empty\n To add a task, please add a new project!")
         }
     })
 }

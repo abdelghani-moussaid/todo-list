@@ -213,3 +213,7 @@ input {
     justify-content: flex-end;
     gap: 10px;
   }
+
+  input[type="checkbox"] {
+    width: 15px;
+  }
