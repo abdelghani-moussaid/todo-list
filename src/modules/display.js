@@ -34,7 +34,7 @@ export default function display(index) {
         projectsDiv.appendChild(projectItem);
         projectItem.addEventListener("click", () => {
             displayTask(project, projectIndex);
-            expandTask(project);
+            expandTask();
         });
     });
     const btnItem = document.createElement("div");
@@ -54,7 +54,7 @@ export default function display(index) {
     addProject();
     const project = projectList.getProjectList();
     displayTask(project[index], index);
-    expandTask(project[index]);
+    expandTask();
     addTask();
 }
 
@@ -166,36 +166,50 @@ function addTask(){
     })
 }
 
-function expandTask(project) {
-    
-    const form = document.querySelector("#expand-task");
+function expandTask() {
     const modal = document.getElementById("expand-modal");
     const expandBtn = document.querySelectorAll(".task-expand");
     expandBtn.forEach((btn) => {
         btn.addEventListener('click', (e) => {
             modal.style.display = "block";
+            const projectIndex = document.querySelector(".task-list").classList[1];
+            // console.log("p " + projectIndex);
+            const project = projectList.getProjectList()[projectIndex];
+            // console.log(project1)
             const todo = project.getTodo()[btn.classList[1]];
+            // console.log(todo)
+            // const todo = project.getTodo()[btn.classList[1]];
             const date = format(todo.dueDate, 'uuuu-MM-dd');
             document.getElementById("task-expand-title").value = todo.title;
             document.getElementById("task-expand-priority").value =  todo.priority;
             document.getElementById("task-expand-due-date").value = date;
-            document.getElementById("task-expand-description").innerText = todo.description;
+            document.getElementById("task-expand-description").value = todo.description;
+            // console.log(document.getElementById("task-expand-description").value);
             const editBtn = document.querySelector("#task-edit");
+            editBtn.className = "";
+            editBtn.className = btn.classList[1];
             editBtn.addEventListener("click", (e) => {
                 e.preventDefault();
+                e.stopImmediatePropagation();
+                // const editBtn = document.querySelector("#task-edit");
+                const projectIndex = document.querySelector(".task-list").classList[1];
+                const project = projectList.getProjectList()[projectIndex];
+                const todo = project.getTodo()[editBtn.className];
+                // console.log(todo2);
+                // const task = project.getTodo()[editBtn.className]; 
                 todo.title = document.getElementById("task-expand-title").value;
                 todo.priority = document.getElementById("task-expand-priority").value;
-                todo.description = document.getElementById("task-expand-description").innerText;
+                todo.description = document.getElementById("task-expand-description").value;
                 todo.dueDate = document.getElementById("task-expand-due-date").value;
                 modal.style.display = "none";
-                display(btn.classList[1]);
+                display(projectIndex);
             });
             const deleteBtn = document.querySelector("#task-delete");
             deleteBtn.addEventListener("click", (e) => {
                 e.preventDefault();
-                project.deleteTodo(btn.classList[1]);
+                // project.deleteTodo(btn.classList[1]);
                 modal.style.display = "none";
-                display(btn.classList[1]);
+                // display(index);
             })
         });
     });
