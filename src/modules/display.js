@@ -14,7 +14,7 @@ export default function display(index) {
     const projectHeader = document.createElement("div");
     projectHeader.classList.add("project-header");
     const projectHeaderTitle = document.createElement("h1");
-    projectHeaderTitle.textContent = "Let's To Do";
+    projectHeaderTitle.textContent = "To-Do";
 
     projectHeader.appendChild(projectHeaderTitle);
     // projectHeader.appendChild(addTaskBtn);    
@@ -41,20 +41,23 @@ export default function display(index) {
             e.stopImmediatePropagation();
             if(confirm("Want to delete?\n All project tasks will lost!")){
                 project.empty();
-                projectList.deleteProject(projectItem);
+                projectList.deleteProject(projectIndex);
                 display(0);
             }
             return;
         })
     });
+    const wrapper = document.createElement("div");
+    wrapper.id = "project-wrapper";
     const btnItem = document.createElement("div");
     btnItem.id = "add-project-item";
     const addProjectBtn = document.createElement("button");
     addProjectBtn.id = "project-add";
     const addProjectSpan = document.createElement("span");
     addProjectSpan.textContent = "Add Project";
-    btnItem.appendChild(addProjectBtn);
-    btnItem.appendChild(addProjectSpan);
+    wrapper.appendChild(addProjectBtn);
+    wrapper.appendChild(addProjectSpan);
+    btnItem.appendChild(wrapper);
     projectsDiv.appendChild(btnItem);
     const taskDiv = document.createElement("div");
     taskDiv.id = "task-list";
@@ -89,16 +92,33 @@ function displayTask(project, index){
             markAsComplete.setAttribute("type", "checkbox");
             const taskTitle = document.createElement("span");
             taskTitle.textContent = task.title;
-            const dueDate = document.createElement("span");
+            const dueDate = document.createElement("div");
             dueDate.textContent = format(task.dueDate, "E d MMM");
             const taskExpandBtn = document.createElement("button");
             taskExpandBtn.classList.add("task-expand");
             taskExpandBtn.classList.add(taskIndex);
+            const taskPriority = document.createElement("div");
+            taskPriority.textContent = task.priority;
             // taskExpandBtn.textContent = "Expand Task";
-            taskItemDiv.appendChild(markAsComplete);
-            taskItemDiv.appendChild(taskTitle);
-            taskItemDiv.appendChild(dueDate);
-            taskItemDiv.appendChild(taskExpandBtn);
+            const firstGroup = document.createElement("div");
+            firstGroup.id = "task-first-group";
+            const secondGroup = document.createElement("div");
+            secondGroup.id = "task-second-group";
+            if(task.priority === "high"){
+                taskPriority.style.color = "#be123c";
+            } else if(task.priority === "medium"){
+                taskPriority.style.color = "#d97706";
+            } else {
+                taskPriority.style.color = "#0e7490";
+            }
+ 
+            firstGroup.appendChild(markAsComplete);
+            firstGroup.appendChild(taskTitle);
+            firstGroup.appendChild(taskExpandBtn);
+            secondGroup.appendChild(dueDate);
+            secondGroup.appendChild(taskPriority);
+            taskItemDiv.appendChild(firstGroup);
+            taskItemDiv.appendChild(secondGroup);
             taskListDiv.appendChild(taskItemDiv);
             markAsComplete.addEventListener("click", (e) => {
                 e.stopImmediatePropagation();
@@ -133,24 +153,29 @@ function displayTask(project, index){
 
 function addProject() {
     const projectListDiv = document.querySelector("#project-list");
-    const addProjectBtn = document.querySelector("#project-add");
+    const addProjectBtn = document.querySelector("#project-wrapper");
 
-    addProjectBtn.addEventListener("click", (e) => {
+    addProjectBtn.addEventListener("click", () => {
         addProjectBtn.style.display = "none";
         const btnItem = document.querySelector("#add-project-item");
         const form = document.createElement("div");
+        form.id = "add-project-form"
         const projectTitle = document.createElement("input");
         projectTitle.id= "project-title";
-        projectTitle.setAttribute("placeholder", "What project are you working on? ");
+        projectTitle.setAttribute("placeholder", "Project title ");
         projectTitle.required = true;
         const submit = document.createElement("input");
         submit.setAttribute("type", "submit");
+        submit.value = "submit";
+        submit.style.backgroundColor = "#bbf7d0";
         const cancel = document.createElement("input");
         cancel.setAttribute("type", "reset");
         cancel.value = "cancel";
+        cancel.style.backgroundColor = "#be123c";
+        cancel.style.color = "white";
         form.appendChild(projectTitle);
-        form.appendChild(submit);
         form.appendChild(cancel);
+        form.appendChild(submit);
         btnItem.appendChild(form);
         projectListDiv.appendChild(btnItem);
         submit.addEventListener("click", (e) => {
@@ -159,8 +184,14 @@ function addProject() {
             projectList.addProject(project);
             display(projectList.getProjectList().length - 1);
         });
+        // window.onclick = function(event) {
+        //     if (event.target == form)  {
+        //         addProjectBtn.style.display = "flex";
+        //         form.remove();
+        //     }
+        // }
         cancel.addEventListener("click", () => {
-                addProjectBtn.style.display = "inline-block";
+                addProjectBtn.style.display = "flex";
                 form.remove();
         });
     })
@@ -170,7 +201,7 @@ function addTask(){
     const taskResetBtn = document.querySelector("#task-reset");
     const modal = document.getElementById("myModal");
     const expandModal = document.getElementById("expand-modal");
-    const addTaskBtn = document.querySelector("#task-add");
+    const addTaskBtn = document.querySelector("#add-task-item");
     window.onclick = function(event) {
         if (event.target == modal)  {
             modal.style.display = "none";
@@ -240,6 +271,7 @@ function expandTask() {
                 const project = projectList.getProjectList()[projectIndex];
                 const todo = project.getTodo()[editBtn.className];
                 todo.title = document.getElementById("task-expand-title").value;
+                document.getElementById("task-expand-title").select();
                 todo.priority = document.getElementById("task-expand-priority").value;
                 todo.description = document.getElementById("task-expand-description").value;
                 todo.dueDate = document.getElementById("task-expand-due-date").value;
