@@ -1,4 +1,5 @@
 import ProjectList from './defaults.js';
+import project from './project.js';
 import Project from './project.js';
 import Todo from './todo.js';
 import { format } from "date-fns";
@@ -81,24 +82,26 @@ function displayTask(project, index){
     const taskListDiv = document.createElement("ul");
     taskListDiv.classList.add("task-list");
     taskListDiv.classList.add(index);
-    project.getTodo().forEach((task, taskIndex) => {
-        const taskItemDiv = document.createElement("li");
-        taskItemDiv.classList.add("task-item");
-        const taskTitle = document.createElement("span");
-        taskTitle.textContent = task.title;
-        const dueDate = document.createElement("span");
-        dueDate.textContent = format(task.dueDate, "E d MMM");
-        const taskExpandBtn = document.createElement("button");
-        taskExpandBtn.classList.add("task-expand");
-        taskExpandBtn.classList.add(taskIndex);
-        taskExpandBtn.textContent = "Expand Task";
-        taskItemDiv.appendChild(taskTitle);
-        taskItemDiv.appendChild(dueDate);
-        taskItemDiv.appendChild(taskExpandBtn);
-        taskListDiv.appendChild(taskItemDiv);
-    })
-
-    taskList.appendChild(taskListDiv);
+    if(project){
+        project.getTodo().forEach((task, taskIndex) => {
+            const taskItemDiv = document.createElement("li");
+            taskItemDiv.classList.add("task-item");
+            const taskTitle = document.createElement("span");
+            taskTitle.textContent = task.title;
+            const dueDate = document.createElement("span");
+            dueDate.textContent = format(task.dueDate, "E d MMM");
+            const taskExpandBtn = document.createElement("button");
+            taskExpandBtn.classList.add("task-expand");
+            taskExpandBtn.classList.add(taskIndex);
+            taskExpandBtn.textContent = "Expand Task";
+            taskItemDiv.appendChild(taskTitle);
+            taskItemDiv.appendChild(dueDate);
+            taskItemDiv.appendChild(taskExpandBtn);
+            taskListDiv.appendChild(taskItemDiv);
+        })
+        taskList.appendChild(taskListDiv);
+    }
+    
 }
 
 
@@ -142,9 +145,6 @@ function addTask(){
     const modal = document.getElementById("myModal");
     const expandModal = document.getElementById("expand-modal");
     const addTaskBtn = document.querySelector("#task-add");
-    addTaskBtn.onclick = function() {
-        modal.style.display = "block";
-    }
     window.onclick = function(event) {
         if (event.target == modal)  {
             modal.style.display = "none";
@@ -158,24 +158,30 @@ function addTask(){
         modal.style.display = "none";
     })
     const form = document.querySelector("#task-form");
-    addTaskBtn.addEventListener("click", () => {  
-        form.addEventListener("submit", (e) =>{
-            form.checkValidity();     
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            const title = document.querySelector("#task-form-title");
-            const description = document.querySelector("#task-form-description");
-            const dueDate = document.querySelector("#task-form-due-date");
-            const dueDateFormat = new Date(dueDate.value);
-            const priority = document.querySelector("#task-form-priority");
-            const todo = Todo(title.value, description.value, dueDateFormat, priority.value, false);
-            const index = document.querySelector(".task-list").classList[1];  
-            const project = projectList.getProjectList()[index];
-            project.addTodo(todo);
-            form.reset(); 
-            modal.style.display = "none";
-            display(index);
-        })
+    addTaskBtn.addEventListener("click", () => { 
+        if(projectList.getProjectList().length !== 0) { 
+            modal.style.display = "block";
+            form.addEventListener("submit", (e) =>{
+                form.checkValidity();     
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                const title = document.querySelector("#task-form-title");
+                const description = document.querySelector("#task-form-description");
+                const dueDate = document.querySelector("#task-form-due-date");
+                const dueDateFormat = new Date(dueDate.value);
+                const priority = document.querySelector("#task-form-priority");
+                const todo = Todo(title.value, description.value, dueDateFormat, priority.value, false);
+                const index = document.querySelector(".task-list").classList[1];  
+                const project = projectList.getProjectList()[index];
+                project.addTodo(todo);
+                form.reset(); 
+                modal.style.display = "none";
+                display(index);
+            })
+        }
+        else {
+            alert("Please add a project!")
+        }
     })
 }
 
