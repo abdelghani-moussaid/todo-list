@@ -1,7 +1,7 @@
 import ProjectList from './defaults.js';
 import Project from './project.js';
 import Todo from './todo.js';
-import { compareAsc, format } from "date-fns";
+import { format } from "date-fns";
 
 const projectList = ProjectList();
 
@@ -30,12 +30,23 @@ export default function display(index) {
         projectName.classList.add("project-name");
         projectName.textContent = project.name;
         projectName.style.display = "inline-block";
+        const deleteProjectButton = document.createElement("button");
+        deleteProjectButton.id = "project-delete";
+        deleteProjectButton.textContent = "Delete Project";
         projectItem.appendChild(projectName);
+        projectItem.appendChild(deleteProjectButton);
         projectsDiv.appendChild(projectItem);
         projectItem.addEventListener("click", () => {
             displayTask(project, projectIndex);
             expandTask();
         });
+        deleteProjectButton.addEventListener("click", () => {
+            if(confirm("Want to delete?\n All project tasks will lost!")){
+                projectList.deleteProject(projectItem);
+                display(0);
+            }
+            return;
+        })
     });
     const btnItem = document.createElement("div");
     btnItem.id = "btn-item";
@@ -209,7 +220,9 @@ function expandTask() {
                 e.stopImmediatePropagation();
                 const projectIndex = document.querySelector(".task-list").classList[1];
                 const project = projectList.getProjectList()[projectIndex];
-                project.deleteTodo(deleteBtn.className);
+                if(confirm("Want to delete?")){
+                    project.deleteTodo(deleteBtn.className);
+                } 
                 modal.style.display = "none";
                 display(projectIndex);
             })
