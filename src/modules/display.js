@@ -1,10 +1,16 @@
 import ProjectList from './defaults.js';
-import project from './project.js';
 import Project from './project.js';
 import Todo from './todo.js';
 import { format } from "date-fns";
+import {localListController} from './localStorageController.js';
 
+
+localStorage.clear();
+
+const ls = localListController();
 const projectList = ProjectList();
+
+
 
 export default function display(index) {
     const container = document.querySelector("#container");
@@ -40,6 +46,7 @@ export default function display(index) {
         deleteProjectButton.addEventListener("click", (e) => {
             e.stopImmediatePropagation();
             if(confirm("Want to delete?\n All project tasks will lost!")){
+                ls.removeProject(project);
                 project.empty();
                 projectList.deleteProject(projectIndex);
                 display(0);
@@ -182,6 +189,7 @@ function addProject() {
             e.preventDefault();
             const project = Project(projectTitle.value);
             projectList.addProject(project);
+            ls.setProject(project)
             display(projectList.getProjectList().length - 1);
         });
         // window.onclick = function(event) {
@@ -227,10 +235,11 @@ function addTask(){
                 const dueDate = document.querySelector("#task-form-due-date");
                 const dueDateFormat = new Date(dueDate.value);
                 const priority = document.querySelector("#task-form-priority");
-                const todo = Todo(title.value, description.value, dueDateFormat, priority.value, false);
+                const todo = Todo(title.value, description.value, dueDateFormat.toJSON(), priority.value, false);
                 const index = document.querySelector(".task-list").classList[1];  
                 const project = projectList.getProjectList()[index];
                 project.addTodo(todo);
+                ls.setTask(project, todo, project.getTodo().length - 1);
                 form.reset(); 
                 modal.style.display = "none";
                 display(index);
