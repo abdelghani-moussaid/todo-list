@@ -7,8 +7,10 @@ import {localListController} from './localStorageController.js';
 
 localStorage.clear();
 
-const ls = localListController();
 const projectList = ProjectList();
+const ls = localListController();
+ls.initialize();
+// const projectList = ls.getLocalProjectList();
 
 
 
@@ -187,10 +189,21 @@ function addProject() {
         projectListDiv.appendChild(btnItem);
         submit.addEventListener("click", (e) => {
             e.preventDefault();
-            const project = Project(projectTitle.value);
-            projectList.addProject(project);
-            ls.setProject(project)
-            display(projectList.getProjectList().length - 1);
+            let exists = false;
+            projectList.getProjectList().forEach(projectItem => {
+                if(projectItem.name === projectTitle.value){
+                    alert("Project name exists!");
+                    exists = true;
+                    addProjectBtn.style.display = "flex";
+                    form.remove();
+                }
+            });
+            if(!exists){
+                const project = Project(projectTitle.value);
+                projectList.addProject(project);
+                ls.setProject(project)
+                display(projectList.getProjectList().length - 1);
+            }
         });
         // window.onclick = function(event) {
         //     if (event.target == form)  {
@@ -239,7 +252,7 @@ function addTask(){
                 const index = document.querySelector(".task-list").classList[1];  
                 const project = projectList.getProjectList()[index];
                 project.addTodo(todo);
-                ls.setTask(project, todo, project.getTodo().length - 1);
+                ls.setTask(project, todo);
                 form.reset(); 
                 modal.style.display = "none";
                 display(index);
@@ -278,12 +291,14 @@ function expandTask() {
                 e.stopImmediatePropagation();
                 const projectIndex = document.querySelector(".task-list").classList[1];
                 const project = projectList.getProjectList()[projectIndex];
+                const oldTodo = project.getTodo()[editBtn.className];
                 const todo = project.getTodo()[editBtn.className];
                 todo.title = document.getElementById("task-expand-title").value;
                 document.getElementById("task-expand-title").select();
                 todo.priority = document.getElementById("task-expand-priority").value;
                 todo.description = document.getElementById("task-expand-description").value;
                 todo.dueDate = document.getElementById("task-expand-due-date").value;
+                ls.editTask(project, oldTodo, todo);
                 modal.style.display = "none";
                 display(projectIndex);
             });
@@ -295,8 +310,10 @@ function expandTask() {
                 e.stopImmediatePropagation();
                 const projectIndex = document.querySelector(".task-list").classList[1];
                 const project = projectList.getProjectList()[projectIndex];
+                const todo = project.getTodo()[deleteBtn.className];
                 if(confirm("Want to delete?")){
                     project.deleteTodo(deleteBtn.className);
+                    ls.removeTask(project, todo);
                 } 
                 modal.style.display = "none";
                 display(projectIndex);

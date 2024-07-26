@@ -317,7 +317,7 @@ input {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    --dark-gray: #171717;
+    --dark-gray: #083344;
     --white: #fafafa;
     --light-gray: #d4d4d4;
   }
