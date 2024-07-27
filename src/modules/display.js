@@ -3,7 +3,7 @@ import Todo from './todo.js';
 import { format } from "date-fns";
 import {localListController} from './localStorageController.js';
 
-// localStorage.clear();
+
 const ls = localListController();
 ls.initialize();
 
@@ -72,7 +72,9 @@ export default function display(index) {
     container.appendChild(content);
     addProject();
     const project = projectList.getProjectList();
-    displayTask(project[index], index);
+    if(project.length > 0){
+        displayTask(project[index], index);
+    }
 }
 
 function displayTask(project, index){
