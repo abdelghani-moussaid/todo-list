@@ -5,12 +5,11 @@ import { format } from "date-fns";
 import {localListController} from './localStorageController.js';
 
 
-localStorage.clear();
-
-const projectList = ProjectList();
+// localStorage.clear();
 const ls = localListController();
 ls.initialize();
-// const projectList = ls.getLocalProjectList();
+
+const projectList = ls.getLocalProjectList();
 
 
 

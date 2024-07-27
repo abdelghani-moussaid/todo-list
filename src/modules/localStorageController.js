@@ -25,11 +25,10 @@ function storageAvailable(type) {
 
 export function localListController(){
     
-    const projectList = DefaultProjectList();
+    const defaultProjectList = DefaultProjectList();
+    const projectList = ProjectList();
     const localProjectList = [];
     const hasVisited = localStorage.getItem('hasVisited');
-    const taskId = 0;
-
 
 
     const initialize = function(){
@@ -37,7 +36,7 @@ export function localListController(){
 
             localStorage.setItem('hasVisited', true)  
             
-            projectList.getProjectList().forEach((project, indexP) => {
+            defaultProjectList.getProjectList().forEach((project, indexP) => {
     
                 localProjectList.push({name: project.name, taskList: []});
                 project.getTodo().forEach((task, indexT) => { 
@@ -45,8 +44,9 @@ export function localListController(){
                 });
             });
     
-            console.log(localProjectList);
+            // console.log(localProjectList);
             localStorage.setItem("localProjectList", JSON.stringify(localProjectList));
+            console.log("duh")
         }
     }
     
@@ -55,9 +55,7 @@ export function localListController(){
         if (!storageAvailable("localStorage")) {
             return;
         }
-
         localProjectList.push({name: project.name, taskList: []});
-        console.log(localProjectList);
         localStorage.setItem("localProjectList", JSON.stringify(localProjectList));
     }
 
@@ -69,13 +67,13 @@ export function localListController(){
         const tasks = localProjectList.find((element) => element.name === project.name).taskList;
         const id = tasks.length == 0 ? 0 : tasks[tasks.length - 1].id + 1;
         localProjectList.find((element) => element.name === project.name).taskList.push({id,task});
-        localStorage.removeItem("localProjectList");
+        // localStorage.removeItem("localProjectList");
         localStorage.setItem("localProjectList", JSON.stringify(localProjectList));
     }
     
     const removeProject = function(project){
         const projectIndex = localProjectList.findIndex((element) => element.name === project.name); 
-        console.log(projectIndex)
+        // console.log(projectIndex)
         if(projectIndex !== -1 && storageAvailable("localStorage")){
             localProjectList.splice(projectIndex, 1);
             // localStorage.removeItem("localProjectList");
@@ -113,20 +111,24 @@ export function localListController(){
     }
 
     const getLocalProjectList = function(){
-        const projectList = ProjectList();
+        if(!hasVisited){
+            return defaultProjectList;
+        }
         const projectListObject = JSON.parse(localStorage.getItem("localProjectList"));
-        console.log(projectListObject)
         if(!projectListObject) return false;
-        projectListObject.forEach(project => {
-            const newProject = Project(project.name);   
-            
-            project.taskList.forEach(item => {
+        projectListObject.forEach((project, projectIndex) => {
+            const newProject = Project(project.name);  
+            localProjectList.push({name: project.name, taskList: []});
+            project.taskList.forEach((item, taskIndex) => {
                 const todo = item.task;
                 const newTask = Todo(todo.title, todo.description, todo.dueDate, todo.priority, todo.isComplete);
                 newProject.addTodo(newTask);
+                localProjectList[projectIndex].taskList.push({id: taskIndex,task: newTask});
             });
             projectList.addProject(newProject);
         });
+
+        console.log(localProjectList)
         return projectList;
     }
 
