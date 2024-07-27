@@ -297,7 +297,7 @@ input {
     padding: 6px;
   }
   #task-list {
-    flex: 3;
+    flex: 4;
     padding: 6px;
   }
 
@@ -352,8 +352,12 @@ input {
     padding: 12px 6px;
     max-width: 160px;
     border-radius: 6px;
+    cursor: pointer;
   }
 
+  #project-wrapper:hover {
+    background-color: #5da6f9;
+  }
   #task-list .project-name {
     padding: 12px;
     border-bottom: 2px solid var(--light-gray);
@@ -364,6 +368,10 @@ input {
     padding: 12px 6px;
     max-width: 140px;
     border-radius: 6px;
+    cursor: pointer;
+  }
+  #add-task-item:hover {
+    background-color: #7cfba9;
   }
 
   ul {
@@ -415,7 +423,7 @@ input {
     color: var(--white);
     border: none;
     border-radius: 6px;
-    background-color: #be123c;
+    background-color: #be2c51;
   }
   input[type="submit"], button[type="submit"] {
     color: var(--dark-gray);
@@ -426,4 +434,14 @@ input {
   input#project-title {
     border-radius: 6px;
     border: none;
+  }
+
+  input[type="reset"]:hover, button[type="reset"]:hover { 
+    background-color: #bf0534;
+    cursor: pointer;
+  }
+
+  input[type="submit"]:hover, button[type="submit"]:hover {
+    background-color: #83f7b3;
+    cursor: pointer;
   }

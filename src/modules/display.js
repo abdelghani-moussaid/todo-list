@@ -31,7 +31,7 @@ export default function display(index) {
         projectItem.classList.add(projectIndex);
         const projectName = document.createElement("h2");
         projectName.classList.add("project-name");
-        projectName.textContent = project.name;
+        projectName.textContent = "# " + project.name;
         const deleteProjectButton = document.createElement("button");
         deleteProjectButton.id = "project-delete";
         projectItem.appendChild(projectName);
@@ -165,7 +165,6 @@ function addProject() {
         const projectTitle = document.createElement("input");
         projectTitle.id= "project-title";
         projectTitle.setAttribute("placeholder", "Project title ");
-        projectTitle.required = true;
         const submit = document.createElement("input");
         submit.setAttribute("type", "submit");
         submit.value = "submit";
@@ -177,18 +176,27 @@ function addProject() {
         form.appendChild(submit);
         btnItem.appendChild(form);
         projectListDiv.appendChild(btnItem);
+        projectTitle.focus();
         submit.addEventListener("click", (e) => {
             e.preventDefault();
-            let exists = false;
+            let invalid = false;
             projectList.getProjectList().forEach(projectItem => {
                 if(projectItem.name === projectTitle.value){
-                    alert("Project name exists!");
-                    exists = true;
+                    alert("Project name exist!");
+                    invalid = true;
                     addProjectBtn.style.display = "flex";
                     form.remove();
+                    return;
                 }
             });
-            if(!exists){
+            if(projectTitle.value === ''){
+                alert("Project title can't be empty!");
+                invalid = true;
+                addProjectBtn.style.display = "flex";
+                form.remove();
+                return;
+            }
+            if(!invalid){
                 const project = Project(projectTitle.value);
                 projectList.addProject(project);
                 ls.setProject(project)
@@ -204,7 +212,7 @@ function addProject() {
         cancel.addEventListener("click", () => {
                 addProjectBtn.style.display = "flex";
                 form.remove();
-        });
+        });        
     })
 }
 
@@ -226,14 +234,18 @@ function addTask(){
         modal.style.display = "none";
     })
     const form = document.querySelector("#task-form");
+    
     addTaskBtn.addEventListener("click", () => { 
         if(projectList.getProjectList().length !== 0) { 
             modal.style.display = "block";
+            const title = document.querySelector("#task-form-title");
+            setTimeout(() => {
+                title.focus();
+              }, 10);
             form.addEventListener("submit", (e) =>{
                 form.checkValidity();     
                 e.preventDefault();
                 e.stopImmediatePropagation();
-                const title = document.querySelector("#task-form-title");
                 const description = document.querySelector("#task-form-description");
                 const dueDate = document.querySelector("#task-form-due-date");
                 const dueDateFormat = new Date(dueDate.value);
@@ -265,6 +277,9 @@ function expandTask() {
             const todo = project.getTodo()[btn.classList[1]];
             const date = format(todo.dueDate, 'uuuu-MM-dd');
             document.getElementById("task-expand-title").value = todo.title;
+            setTimeout(() => {
+                document.getElementById("task-expand-title").focus();
+              }, 10);
             document.getElementById("task-expand-priority").value =  todo.priority;
             document.getElementById("task-expand-due-date").value = date;
             document.getElementById("task-expand-description").value = todo.description;
