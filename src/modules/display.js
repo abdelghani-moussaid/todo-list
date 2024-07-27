@@ -1,11 +1,9 @@
-import ProjectList from './defaults.js';
 import Project from './project.js';
 import Todo from './todo.js';
 import { format } from "date-fns";
 import {localListController} from './localStorageController.js';
 
 
-// localStorage.clear();
 const ls = localListController();
 ls.initialize();
 
@@ -23,8 +21,7 @@ export default function display(index) {
     const projectHeaderTitle = document.createElement("h1");
     projectHeaderTitle.textContent = "To-Do";
 
-    projectHeader.appendChild(projectHeaderTitle);
-    // projectHeader.appendChild(addTaskBtn);    
+    projectHeader.appendChild(projectHeaderTitle);  
     container.appendChild(projectHeader);
     const projectsDiv = document.createElement("div");
     projectsDiv.id = "project-list";
@@ -37,7 +34,6 @@ export default function display(index) {
         projectName.textContent = project.name;
         const deleteProjectButton = document.createElement("button");
         deleteProjectButton.id = "project-delete";
-        // deleteProjectButton.textContent = "Delete Project";
         projectItem.appendChild(projectName);
         projectItem.appendChild(deleteProjectButton);
         projectsDiv.appendChild(projectItem);
@@ -107,7 +103,6 @@ function displayTask(project, index){
             taskExpandBtn.classList.add(taskIndex);
             const taskPriority = document.createElement("div");
             taskPriority.textContent = task.priority;
-            // taskExpandBtn.textContent = "Expand Task";
             const firstGroup = document.createElement("div");
             firstGroup.id = "task-first-group";
             const secondGroup = document.createElement("div");
@@ -143,7 +138,6 @@ function displayTask(project, index){
         addTaskItem.id = "add-task-item";
         const addTaskBtn = document.createElement("button");
         addTaskBtn.id = "task-add";
-        // addTaskBtn.textContent = "Add Task";
         const addTaskSpan = document.createElement("span");
         addTaskSpan.textContent = "Add Task";
         taskList.appendChild(projectName);
@@ -175,12 +169,9 @@ function addProject() {
         const submit = document.createElement("input");
         submit.setAttribute("type", "submit");
         submit.value = "submit";
-        submit.style.backgroundColor = "#bbf7d0";
         const cancel = document.createElement("input");
         cancel.setAttribute("type", "reset");
         cancel.value = "cancel";
-        cancel.style.backgroundColor = "#be123c";
-        cancel.style.color = "white";
         form.appendChild(projectTitle);
         form.appendChild(cancel);
         form.appendChild(submit);
@@ -270,18 +261,13 @@ function expandTask() {
         btn.addEventListener('click', (e) => {
             modal.style.display = "block";
             const projectIndex = document.querySelector(".task-list").classList[1];
-            // console.log("p " + projectIndex);
             const project = projectList.getProjectList()[projectIndex];
-            // console.log(project1)
             const todo = project.getTodo()[btn.classList[1]];
-            // console.log(todo)
-            // const todo = project.getTodo()[btn.classList[1]];
             const date = format(todo.dueDate, 'uuuu-MM-dd');
             document.getElementById("task-expand-title").value = todo.title;
             document.getElementById("task-expand-priority").value =  todo.priority;
             document.getElementById("task-expand-due-date").value = date;
             document.getElementById("task-expand-description").value = todo.description;
-            // console.log(document.getElementById("task-expand-description").value);
             const editBtn = document.querySelector("#task-edit");
             editBtn.className = "";
             editBtn.className = btn.classList[1];

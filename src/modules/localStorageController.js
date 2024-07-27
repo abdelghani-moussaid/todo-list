@@ -33,7 +33,7 @@ export function localListController(){
 
     const initialize = function(){
         if(!hasVisited && storageAvailable("localStorage")) {
-
+            localStorage.clear();
             localStorage.setItem('hasVisited', true)  
             
             defaultProjectList.getProjectList().forEach((project, indexP) => {
@@ -43,8 +43,6 @@ export function localListController(){
                     localProjectList[indexP].taskList.push({id: indexT, task});
                 });
             });
-    
-            // console.log(localProjectList);
             localStorage.setItem("localProjectList", JSON.stringify(localProjectList));
             console.log("duh")
         }
@@ -63,20 +61,16 @@ export function localListController(){
         if (!storageAvailable("localStorage")) {
             return;
         }
-        // console.log(localProjectList.name)
         const tasks = localProjectList.find((element) => element.name === project.name).taskList;
         const id = tasks.length == 0 ? 0 : tasks[tasks.length - 1].id + 1;
         localProjectList.find((element) => element.name === project.name).taskList.push({id,task});
-        // localStorage.removeItem("localProjectList");
         localStorage.setItem("localProjectList", JSON.stringify(localProjectList));
     }
     
     const removeProject = function(project){
         const projectIndex = localProjectList.findIndex((element) => element.name === project.name); 
-        // console.log(projectIndex)
         if(projectIndex !== -1 && storageAvailable("localStorage")){
             localProjectList.splice(projectIndex, 1);
-            // localStorage.removeItem("localProjectList");
             localStorage.setItem("localProjectList", JSON.stringify(localProjectList));
 
         }
@@ -85,10 +79,8 @@ export function localListController(){
     const removeTask = function(project,todo){
         const projectIndex = localProjectList.findIndex((element) => element.name === project.name);
         const taskIndex = localProjectList[projectIndex].taskList.findIndex((element) =>  JSON.stringify(element.task) === JSON.stringify(todo));
-        // console.log(projectIndex, taskIndex)
         if(projectIndex !== -1 && taskIndex !== -1){
             localProjectList[projectIndex].taskList.splice(taskIndex, 1);
-            // localStorage.removeItem("localProjectList");
             if (storageAvailable("localStorage")) { 
                 localStorage.setItem("localProjectList", JSON.stringify(localProjectList));
             }
@@ -103,15 +95,12 @@ export function localListController(){
         const projectIndex = localProjectList.findIndex((element) => element.name === project.name);
         const taskIndex = localProjectList[projectIndex].taskList.findIndex((element) =>  JSON.stringify(element.task) === JSON.stringify(oldTask));
         
-        // console.log(localProjectList[projectIndex].taskList)
-
         localProjectList[projectIndex].taskList[taskIndex].task = newTask;
-        // localStorage.removeItem("localProjectList");
         localStorage.setItem("localProjectList", JSON.stringify(localProjectList));
     }
 
     const getLocalProjectList = function(){
-        if(!hasVisited){
+        if(!hasVisited || !storageAvailable("localStorage")){
             return defaultProjectList;
         }
         const projectListObject = JSON.parse(localStorage.getItem("localProjectList"));
