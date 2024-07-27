@@ -3,7 +3,7 @@ import Todo from './todo.js';
 import { format } from "date-fns";
 import {localListController} from './localStorageController.js';
 
-
+localStorage.clear();
 const ls = localListController();
 ls.initialize();
 
