@@ -44,7 +44,6 @@ export function localListController(){
                 });
             });
             localStorage.setItem("localProjectList", JSON.stringify(localProjectList));
-            console.log("duh")
         }
     }
     
@@ -117,7 +116,6 @@ export function localListController(){
             projectList.addProject(newProject);
         });
 
-        console.log(localProjectList)
         return projectList;
     }
 
