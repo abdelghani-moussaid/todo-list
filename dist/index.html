@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+<script defer src="main.js"></script></head>
+<body>
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <form id="task-form">
+                <input type="text" id="task-form-title" placeholder="Task Title" required>
+                <div id="task-specify">
+                    <select name="priority" id="task-form-priority">
+                        <option value="low" selected>low</option>
+                        <option value="medium">medium</option>
+                        <option value="high">high</option>
+                    </select>
+                    <input type="date" name="dueDate" id="task-form-due-date" required>
+                </div>
+                <textarea name="description" id="task-form-description" placeholder="Describe what you are working on!"></textarea>
+                <!-- <select name="project" id="task-form-project">
+                    
+                </select> -->
+                <div id="task-form-button">
+                    <button id="task-reset" type="reset">cancel</button>
+                    <button id="task-submit" type="submit">save</button>
+                </div>
+            </form>
+        </div>
+    
+    </div>
+    <!-- The Modal -->
+    <div id="expand-modal" class="expand-modal">
+
+        <!-- Modal content -->
+        <div class="modal-expand-content">
+            <form id="expand-task">
+                <input type="text" id="task-expand-title" placeholder="Task Title" value = "">
+                <div id="task-specify">
+                    <select name="priority" id="task-expand-priority">
+                        <option value="low">low</option>
+                        <option value="medium">medium</option>
+                        <option value="high">high</option>
+                    </select>
+                    <input type="date" name="dueDate" id="task-expand-due-date" required>
+                </div>
+                <textarea name="description" id="task-expand-description" placeholder="Describe what you are working on!"></textarea>
+                <!-- <select name="project" id="task-expand-project">
+                    
+                </select> -->
+                <div id="task-expand-button">
+                    <button id="task-delete" type="reset">delete</button>
+                    <button id="task-edit" type="submit">edit</button>
+                </div>
+            </form>
+        </div>
+    
+    </div>
+    <main>
+        <div id="container">
+
+        </div>
+        <footer>
+            <div>    
+                Made by <a href="https://github.com/abdelghani-moussaid">Abdelghani Moussaid</a>
+            </div>
+            <div>
+                <a href="https://github.com/abdelghani-moussaid"><img src=61b253625339b5d526df.svg alt="github profile" height="30px" width="30px"></a>
+            </div> 
+        </footer>
+    </main>
+    
+</body>
+</html>
